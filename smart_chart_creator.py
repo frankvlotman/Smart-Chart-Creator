@@ -123,7 +123,7 @@ def generate_chart():
         df_grouped = df_filtered.groupby('YY-QQ').agg({column3_var.get(): 'sum'}).reset_index()
 
         # Set the chart size based on the toggle state
-        chart_size = (5, 3) if small_chart else (10, 6)
+        chart_size = (7, 3) if small_chart else (10, 6)
 
         plt.figure(figsize=chart_size)
 
@@ -132,7 +132,7 @@ def generate_chart():
 
         # Check selected chart type and plot accordingly
         if chart_type.get() == "Line":
-            plt.plot(df_grouped['YY-QQ'], df_grouped[column3_var.get()], marker='o', color=plot_color, label=f'{column3_var.get()} over YY-QQ')
+            plt.plot(df_grouped['YY-QQ'], df_grouped[column3_var.get()], marker='o', color=plot_color)
 
             # Add value labels without decimals
             for i, value in enumerate(df_grouped[column3_var.get()]):
@@ -142,7 +142,7 @@ def generate_chart():
             plt.grid(True, color='#f0f0f0')
 
         elif chart_type.get() == "Bar":
-            plt.bar(df_grouped['YY-QQ'], df_grouped[column3_var.get()], color=plot_color, label=f'{column3_var.get()} over YY-QQ')
+            plt.bar(df_grouped['YY-QQ'], df_grouped[column3_var.get()], color=plot_color)
 
             # Add value labels to the bar chart
             for i, value in enumerate(df_grouped[column3_var.get()]):
@@ -151,18 +151,27 @@ def generate_chart():
             # Hide grid lines for bar chart
             plt.grid(False)
 
-        plt.xlabel('YY-QQ')
-        plt.ylabel(column3_var.get())
-        plt.title(f'{column3_var.get()} for {selected_value_col2}')
+        # Set axis labels with dark grey color
+        plt.xlabel('YY-QQ', color='#706e6b')
+        plt.ylabel(column3_var.get(), color='#706e6b')
+        plt.title(f'Sales {column3_var.get()} for {selected_value_col2}')
 
         # Customize the grid lines to be lighter and less prominent
         plt.gca().spines['top'].set_visible(False)
         plt.gca().spines['right'].set_visible(False)
 
+        # Set axis lines (spines) color to dark grey
+        ax = plt.gca()
+        ax.spines['left'].set_color('#706e6b')
+        ax.spines['bottom'].set_color('#706e6b')
+
+        # Set tick labels color to dark grey
+        ax.tick_params(axis='x', colors='#706e6b')
+        ax.tick_params(axis='y', colors='#706e6b')
+
         plt.xticks(rotation=45)
         plt.subplots_adjust(bottom=0.25)
         
-        plt.legend()
         plt.show()
 
     except KeyError as e:
